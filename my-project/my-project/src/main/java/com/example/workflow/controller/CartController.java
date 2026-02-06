@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class CartController {
     private final CartService cartService;
-    @PreAuthorize("hasAnyRole('ADMIN','USER')")
+    //@PreAuthorize("hasAnyRole('ADMIN','USER')")
     @PostMapping("/add")
     public String add(@RequestParam Long userId, @RequestParam Long productId, @RequestParam int quantity) {
         cartService.addToCart(userId, productId, quantity);

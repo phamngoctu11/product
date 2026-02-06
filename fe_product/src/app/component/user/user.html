@@ -8,7 +8,7 @@
     <div class="card-body">
       <div class="row g-3">
         <div class="col-md-5">
-          <label class="form-label fw-bold">Tên đăng nhập (Username)</label>
+          <label class="form-label fw-bold">Tên đăng nhập</label>
           <input
             type="text"
             class="form-control"
@@ -101,7 +101,7 @@
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header bg-info text-white">
-        <h5 class="modal-title">Giỏ hàng của người dùng ID: {{ cartData.userId }}</h5>
+        <h5 class="modal-title">Giỏ hàng của người dùng ID: {{ cartData.user_id }}</h5>
         <button type="button" class="btn-close" (click)="closeCart()"></button>
       </div>
       <div class="modal-body">
@@ -134,7 +134,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" (click)="closeCart()">Đóng</button>
-        <button type="button" class="btn btn-primary">Thanh toán</button>
+        <button type="button" class="btn btn-primary" (click)="approve(cartData.user_id)">Thanh toán</button>
       </div>
     </div>
   </div>

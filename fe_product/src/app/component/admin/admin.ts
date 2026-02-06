@@ -3,6 +3,7 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { CartService } from '../../service/cart.service';
+import { AuthService } from '../../service/auth.service';
 
 @Component({
   selector: 'app-admin',
@@ -13,33 +14,35 @@ import { CartService } from '../../service/cart.service';
 export class Admin implements OnInit {
   http = inject(HttpClient);
   plist: any[] = [];
-
-  currentUserId: number = 1;
-
-  constructor(private cartService: CartService) {}
-
+  constructor(private cartService: CartService,private authService:AuthService) {}
+currentUserId:any;
   search_id = signal<number>(0);
   pObj: any = {
     id: null,
     product_name: '',
     quantity: ''
   };
-
   ngOnInit(): void {
+    this.currentUserId = this.authService.getUserId();
     this.getAll();
   }
-
   getAll() {
     this.http.get("http://localhost:8080/api/products").subscribe((res: any) => this.plist = res);
   }
-
-  onAddToCart(productId: number) {
+ onAddToCart(productId: number) {
+  if (this.currentUserId !== null) {
     this.cartService.addToCart(this.currentUserId, productId, 1).subscribe({
-      next: (res) => alert("Đã thêm sản phẩm vào giỏ hàng thành công!"),
-      error: (err) => alert("Không thể thêm vào giỏ: " + err.message)
+      next: (res) => {
+        alert("Thông báo: " + res); // Ví dụ: "Đã thêm vào giỏ hàng"
+      },
+      error: (err) => {
+        alert("Không thể thêm vào giỏ hàng: " + (err.error || "Lỗi hệ thống"));
+      }
     });
+  } else {
+    alert("Cảnh báo: Bạn cần đăng nhập để thêm sản phẩm vào giỏ hàng!");
   }
-
+}
   create() {
     this.http.post("http://localhost:8080/api/products", this.pObj).subscribe({
       next: (res) => {

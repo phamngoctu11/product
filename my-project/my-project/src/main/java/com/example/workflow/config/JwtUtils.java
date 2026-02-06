@@ -12,10 +12,11 @@ import java.util.Set;
 public class JwtUtils {
     private final String SECRET_KEY = "YourSecretKeyForJWTAuthenticationProjectWorkflow";
     private final long EXPIRATION_TIME = 86400000;
-    public String generateToken(String username, Set<Role> roles) {
+    public String generateToken(Long user_id,String username, Set<Role> roles) {
         return Jwts.builder()
                 .setSubject(username)
                 .claim("roles", roles)
+                .claim("user_id",user_id)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .signWith(Keys.hmacShaKeyFor(SECRET_KEY.getBytes()), SignatureAlgorithm.HS256)

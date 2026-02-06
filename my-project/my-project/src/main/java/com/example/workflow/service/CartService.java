@@ -73,20 +73,18 @@ public class CartService {
                 .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Giỏ hàng trống"));
         return cartMapper.toDTO(cart);
     }
+    @Transactional
     public String approve_cart(Long userId){
         Cart cart = cartRepository.findByUserId(userId).orElseThrow(()->new AppException(HttpStatus.NOT_FOUND,"Cart not found!!"));
-        Iterator<CartItem> iterator = cart.getItems().iterator();
-        while(iterator.hasNext()){
-            CartItem item = iterator.next();
-            Product pro = productRepository.findById(item.getId())
-                    .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Product not found!"));
+        for(CartItem item : cart.getItems()) {
+            Product pro = item.getProduct();
             if (item.getQuantity() > pro.getQuantity()) {
                 return "Thất bại: Sản phẩm " + pro.getProduct_name() + " không đủ số lượng trong kho.";
             }
             pro.setQuantity(pro.getQuantity() - item.getQuantity());
             productRepository.save(pro);
-            iterator.remove();
         }
+        cart.getItems().clear();
         cartRepository.save(cart);
         return "Duyệt giỏ hàng thành công!";
         }

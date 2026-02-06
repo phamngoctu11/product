@@ -26,8 +26,8 @@ public class AuthController {
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         if (passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            String token = jwtUtils.generateToken(user.getUsername(),user.getRoles());
-            return ResponseEntity.ok(new AuthResponse(token, user.getUsername()));
+            String token = jwtUtils.generateToken(user.getId(),user.getUsername(),user.getRoles());
+            return ResponseEntity.ok(new AuthResponse(token,user.getId(), user.getUsername()));
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
     }

@@ -6,7 +6,7 @@ export interface CartItemRes {
 }
 
 export interface CartRes {
-  userId: number;
+  user_id: number;
   items: CartItemRes[];
   totalPrice: number;
 }

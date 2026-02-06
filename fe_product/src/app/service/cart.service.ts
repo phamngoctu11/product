@@ -23,7 +23,7 @@ export class CartService {
 
   return this.http.post(`${this.apiUrl}/add`, null, {
     params,
-    responseType: 'text' as 'json' 
+    responseType: 'text' as 'json'
   }) as Observable<string>;
 }
 removeFromCart(userId: number, productId: number): Observable<string> {
@@ -33,6 +33,11 @@ removeFromCart(userId: number, productId: number): Observable<string> {
 
   return this.http.delete(`${this.apiUrl}/remove`, {
     params,
+    responseType: 'text' as 'json'
+  }) as Observable<string>;
+}
+acceptCart(userId: number): Observable<string> {
+  return this.http.post(`${this.apiUrl}/approve/${userId}`, null, {
     responseType: 'text' as 'json'
   }) as Observable<string>;
 }

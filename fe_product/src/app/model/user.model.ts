@@ -9,7 +9,8 @@ export interface UserCreDTO {
   password?: string;
 }
 export interface LoginResponse {
-  accessToken: string; 
+  accessToken: string;
+  user_id: number;
   username: string;
 }
 

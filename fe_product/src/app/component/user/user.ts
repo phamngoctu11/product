@@ -16,7 +16,6 @@ export class UserComponent implements OnInit {
   users: UserResDTO[] = [];
   currentUser: UserCreDTO = { username: '', password: '' };
   isEdit = false;
-
   cartData?: CartRes;
 
   constructor(
@@ -28,7 +27,7 @@ export class UserComponent implements OnInit {
     this.loadUsers();
   }
 
-isLoadingCart = false; // Thêm biến này
+isLoadingCart = false;
 
 viewCart(userId: number) {
   this.isLoadingCart = true;
@@ -66,12 +65,28 @@ viewCart(userId: number) {
     this.isEdit = true;
     this.currentUser = { ...user };
   }
+approve(id: number) {
+  if (!id) {
+    alert("Lỗi: Không tìm thấy ID người dùng!");
+    return;
+  }
 
+  this.cartService.acceptCart(id).subscribe({
+    next: (res) => {
+      // res ở đây thường là chuỗi thông báo từ backend
+      alert("Thành công: " + res);
+      this.viewCart(id); // Load lại danh sách nếu cần
+    },
+    error: (err) => {
+      alert("Lỗi khi duyệt giỏ hàng: " + (err.error || "Không xác định"));
+    }
+  });
+}
   deleteUser(id: number) {
     if (confirm('Bạn có chắc muốn xóa người dùng này? Thao tác này sẽ xóa cả giỏ hàng liên quan.')) {
       this.userService.delete(id).subscribe(() => {
         this.loadUsers();
-        if (this.cartData?.userId === id) this.cartData = undefined;
+        if (this.cartData?.user_id === id) this.cartData = undefined;
       });
     }
   }

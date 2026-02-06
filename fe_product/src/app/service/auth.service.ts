@@ -12,17 +12,19 @@ export class AuthService {
   constructor(private http: HttpClient) { }
 
   login(credentials: LoginRequest): Observable<LoginResponse> {
-    // Gọi tới endpoint xử lý đăng nhập (thường là /login hoặc /signin)
     return this.http.post<LoginResponse>(`${this.apiUrl}/login`, credentials).pipe(
       tap(res => {
-        // Lưu accessToken nhận được từ class AuthResponse (Java) vào trình duyệt
         localStorage.setItem('accessToken', res.accessToken);
+        localStorage.setItem('user_id',res.user_id.toString());
         localStorage.setItem('username', res.username);
       })
     );
   }
-
   logout() {
     localStorage.clear();
   }
+  getUserId(): number | null {
+  const id = localStorage.getItem('user_id');
+  return id ? parseInt(id, 10) : null;
+}
 }
