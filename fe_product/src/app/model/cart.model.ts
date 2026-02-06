@@ -2,7 +2,7 @@ export interface CartItemRes {
   productId: number;
   productName: string;
   quantity: number;
-  priceAtAdd: number;
+  price: number;
 }
 
 export interface CartRes {

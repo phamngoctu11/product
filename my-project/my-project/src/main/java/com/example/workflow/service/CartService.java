@@ -23,29 +23,6 @@ public class CartService {
     private final ProductRepository productRepository;
     private final UserRepository userRepository;
     private final CartMapper cartMapper;
-    public void addToCart(Long userId, Long productId, int quantity) {
-        if (!userRepository.existsById(userId)) {
-            throw new AppException(HttpStatus.NOT_FOUND, "User not found!!");
-        }
-        Cart cart = cartRepository.findByUserId(userId).orElseThrow(()-> new AppException(HttpStatus.NOT_FOUND,"Not found cart!"));
-        Optional<CartItem> existingItem = cart.getItems().stream()
-                .filter(item -> item.getProduct().getId().equals(productId))
-                .findFirst();
-        if (existingItem.isPresent()) {
-            CartItem item = existingItem.get();
-            item.setQuantity(item.getQuantity() + quantity);
-        } else {
-            Product product = productRepository.findById(productId)
-                    .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Product not found"));
-            CartItem newItem = new CartItem();
-            newItem.setCart(cart);
-            newItem.setProduct(product);
-            newItem.setQuantity(quantity);
-            newItem.setPrice(product.getPrice());
-            cart.getItems().add(newItem);
-        }
-        cartRepository.save(cart);
-    }
     public void updateQuantity(Long userId, Long productId, int newQuantity) {
         Cart cart = cartRepository.findByUserId(userId)
                 .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Cart empty"));
@@ -53,7 +30,6 @@ public class CartService {
                 .filter(i -> i.getProduct().getId().equals(productId))
                 .findFirst()
                 .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Product not in cart"));
-
         if (newQuantity <= 0) {
             cart.getItems().remove(item);
         } else {

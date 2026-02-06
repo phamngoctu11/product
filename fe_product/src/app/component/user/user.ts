@@ -73,9 +73,8 @@ approve(id: number) {
 
   this.cartService.acceptCart(id).subscribe({
     next: (res) => {
-      // res ở đây thường là chuỗi thông báo từ backend
-      alert("Thành công: " + res);
-      this.viewCart(id); // Load lại danh sách nếu cần
+      alert(res);
+      this.viewCart(id);
     },
     error: (err) => {
       alert("Lỗi khi duyệt giỏ hàng: " + (err.error || "Không xác định"));

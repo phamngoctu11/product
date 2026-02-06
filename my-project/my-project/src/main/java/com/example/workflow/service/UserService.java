@@ -25,35 +25,6 @@ import java.util.stream.Collectors;
 public class UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
-    private final CartRepository cartRepository;
-    private final PasswordEncoder passwordEncoder;
-
-    public UserResDTO createUser(UserCreDTO request) {
-        if (userRepository.existsByUsername(request.getUsername())) {
-            throw new AppException(HttpStatus.CONFLICT, "Username already exists");
-        }
-        HashSet<String> rolesInput = request.getRoles();
-        HashSet<Role> roles = new HashSet<>();
-        if (rolesInput == null || rolesInput.isEmpty()) {
-            roles.add(Role.USER);
-        } else {
-            rolesInput.forEach(roleStr -> {
-                try {
-                    roles.add(Role.valueOf(roleStr.toUpperCase()));
-                } catch (IllegalArgumentException ignored) {
-                }
-            });
-        }
-        Cart cart = new Cart();
-        User user = userMapper.toEntity(request);
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user.setRoles(roles);
-        cart.setUser(user);
-        user.setCart(cart);
-        cartRepository.save(cart);
-        userRepository.save(user);
-        return userMapper.toResponse(user);
-    }
     @Transactional(readOnly = true)
     public List<UserResDTO> getAllUsers() {
         return userRepository.findAll().stream()

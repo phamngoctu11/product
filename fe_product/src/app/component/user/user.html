@@ -111,16 +111,16 @@
               <th>Sản phẩm</th>
               <th>Số lượng</th>
               <th>Giá lúc thêm</th>
-              <th>Thành tiền</th>
+              <th>Tổng tiền sản phẩm</th>
             </tr>
           </thead>
           <tbody>
             @for (item of cartData.items; track item.productId) {
             <tr>
-              <td>{{ item.productName }}</td>
+              <td class="text-center">{{ item.productName }}</td>
               <td class="text-center">{{ item.quantity }}</td>
-              <td class="text-end">{{ item.priceAtAdd | number }}đ</td>
-              <td class="text-end fw-bold">{{ (item.quantity * item.priceAtAdd) | number }}đ</td>
+              <td class="text-end">{{ item.price | number }}đ</td>
+              <td class="text-end fw-bold">{{ (item.quantity * item.price) | number }}đ</td>
             </tr>
             }
           </tbody>
